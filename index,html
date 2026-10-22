@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vinted Smart Seller Hub - Dublin Student Edition</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            vinted: {
+              teal: '#00A8A8',
+              darkteal: '#007D7D',
+              coral: '#FF6B6B',
+              purple: '#8B5CF6',
+              lime: '#10B981',
+              neonlime: '#22C55E',
+              amber: '#F59E0B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #f0fdfa 0%, #f5f3ff 50%, #fff1f2 100%);
+      min-height: 100vh;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+    .glass-nav {
+      background: rgba(0, 168, 168, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .glow-hover {
+      transition: all 0.25s ease-in-out;
+    }
+    .glow-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 168, 168, 0.2);
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased flex flex-col pb-16">
+
+  <!-- TOP STATUS BANNER -->
+  <div class="bg-slate-900 text-teal-300 text-xs font-semibold px-4 py-2 text-center flex items-center justify-center gap-2 shadow-inner">
+    <span class="bg-vinted-teal text-white px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">Live Demo</span>
+    <span>Dublin Student Wardrobe Management & Revolut Payout Sync</span>
+  </div>
+
+  <!-- HEADER & NAVIGATION -->
+  <header class="glass-nav text-white sticky top-0 z-40 shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
+        <div class="flex items-center space-x-2.5">
+          <div class="bg-white text-vinted-teal p-2 rounded-2xl shadow-inner font-extrabold text-xl">
+            <i class="fa-solid fa-bolt-lightning text-vinted-coral"></i>
+          </div>
+          <div>
+            <h1 class="font-extrabold text-lg leading-tight tracking-tight flex items-center gap-1.5">
+              Vinted Smart Hub
+              <span class="bg-vinted-coral text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full">Dublin Edition</span>
+            </h1>
+            <p class="text-[11px] text-teal-100 font-medium">Wardrobe Inventory & Fee Calculator</p>
+          </div>
+        </div>
+      </div>
+
+      <nav class="flex items-center space-x-1 text-xs font-semibold overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
+        <a href="#tracker-section" class="px-3 py-1.5 rounded-xl bg-white/25 hover:bg-white/35 text-white transition whitespace-nowrap">
+          <i class="fa-solid fa-boxes-stacked mr-1"></i> Wardrobe Dashboard
+        </a>
+        <a href="#calculator-section" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-teal-50 transition whitespace-nowrap">
+          <i class="fa-solid fa-calculator mr-1"></i> Fee & Checkout Calculator
+        </a>
+        <a href="#testing-section" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-teal-50 transition whitespace-nowrap">
+          <i class="fa-solid fa-user-check mr-1"></i> User Testing Log
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-6xl mx-auto px-4 py-6 w-full space-y-8 flex-grow">
+
+    <!-- METRICS OVERVIEW CARDS -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-3.5">
+      <div class="glass-card p-4 rounded-2xl shadow-sm border border-slate-200/60 glow-hover">
+        <p class="text-xs font-semibold text-slate-500 flex items-center justify-between">
+          Active Listings <i class="fa-solid fa-tags text-vinted-teal"></i>
+        </p>
+        <p id="stat-total" class="text-2xl font-black text-slate-800 mt-1">8</p>
+        <p class="text-[10px] text-slate-400 font-medium">Synced from wardrobe</p>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl shadow-sm border border-slate-200/60 glow-hover">
+        <p class="text-xs font-semibold text-slate-500 flex items-center justify-between">
+          Stale Stock (&gt;10d) <i class="fa-solid fa-triangle-exclamation text-vinted-coral"></i>
+        </p>
+        <p id="stat-stale" class="text-2xl font-black text-vinted-coral mt-1">0</p>
+        <p class="text-[10px] text-vinted-coral font-medium">Needs price reduction</p>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl shadow-sm border border-slate-200/60 glow-hover">
+        <p class="text-xs font-semibold text-slate-500 flex items-center justify-between">
+          Awaiting Payout <i class="fa-solid fa-clock text-vinted-amber"></i>
+        </p>
+        <p id="stat-pending" class="text-2xl font-black text-vinted-amber mt-1">0</p>
+        <p class="text-[10px] text-slate-400 font-medium">Parcels in transit</p>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl shadow-sm border border-slate-200/60 glow-hover">
+        <p class="text-xs font-semibold text-slate-500 flex items-center justify-between">
+          Revolut Revenue <i class="fa-solid fa-euro-sign text-vinted-lime"></i>
+        </p>
+        <p id="stat-revenue" class="text-2xl font-black text-vinted-lime mt-1">€0.00</p>
+        <p class="text-[10px] text-emerald-600 font-medium">Completed earnings</p>
+      </div>
+    </section>
+
+    <!-- INVENTORY DASHBOARD -->
+    <section id="tracker-section" class="glass-card rounded-3xl shadow-xl border border-teal-100 overflow-hidden">
+      <!-- HEADER BAR -->
+      <div class="p-5 bg-white/90 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="bg-vinted-teal text-white p-1.5 rounded-xl text-xs"><i class="fa-solid fa-boxes-stacked"></i></span>
+            <h2 class="font-extrabold text-slate-800 text-base">Dublin Student Wardrobe Tracker</h2>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">Manage stock, calculate buyer totals, and drop prices on stagnant items</p>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <button onclick="toggleModal(true)" class="bg-vinted-teal hover:bg-vinted-darkteal text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-md transition flex items-center gap-1.5">
+            <i class="fa-solid fa-plus"></i> Add New Item
+          </button>
+          <button onclick="resetToSampleData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1" title="Reset default items">
+            <i class="fa-solid fa-rotate-right"></i> Reset Default Items
+          </button>
+        </div>
+      </div>
+
+      <!-- FILTER TABS & STATUS -->
+      <div class="px-5 py-3 bg-slate-50/80 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center space-x-1.5 overflow-x-auto">
+          <button onclick="setFilter('all')" id="filter-all" class="px-3 py-1 rounded-lg text-xs font-extrabold bg-vinted-teal text-white shadow-sm">All Listings</button>
+          <button onclick="setFilter('action')" id="filter-action" class="px-3 py-1 rounded-lg text-xs font-semibold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Action Needed (&gt;10d)</button>
+          <button onclick="setFilter('active')" id="filter-active" class="px-3 py-1 rounded-lg text-xs font-semibold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Active</button>
+          <button onclick="setFilter('sold')" id="filter-sold" class="px-3 py-1 rounded-lg text-xs font-semibold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Sold / Payout</button>
+        </div>
+        <span class="text-[11px] font-semibold text-slate-400">Data Storage: <span class="text-emerald-600 font-bold"><i class="fa-solid fa-circle-check"></i> Local Persistence Active</span></span>
+      </div>
+
+      <!-- INVENTORY LIST CONTAINER -->
+      <div id="inventory-container" class="divide-y divide-slate-100 bg-white/70">
+        <!-- Dynamic Cards rendered here via JS -->
+      </div>
+    </section>
+
+    <!-- CALCULATOR SECTION -->
+    <section id="calculator-section" class="glass-card p-6 rounded-3xl shadow-xl border border-teal-100 space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="bg-vinted-purple text-white p-1.5 rounded-xl text-xs"><i class="fa-solid fa-calculator"></i></span>
+            <h2 class="font-extrabold text-slate-800 text-base">Buyer Checkout & Seller Net Payout Calculator</h2>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">Calculates exact total paid by buyer (Item + Protection Fee + Shipping) vs seller net payout</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+        <!-- INPUTS -->
+        <div class="md:col-span-5 space-y-4">
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label for="calc-price-input" class="text-xs font-bold text-slate-700">Item Listing Price (€)</label>
+              <button onclick="loadBriefExample()" class="text-[11px] text-vinted-teal font-extrabold hover:underline">Load Track Top Example (€11.00)</button>
+            </div>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 font-bold">€</span>
+              <input type="number" id="calc-price-input" value="11.00" step="0.01" min="1" oninput="runCalculator()" class="w-full pl-8 pr-3 py-2.5 bg-white border border-slate-300 rounded-xl font-bold text-slate-800 text-sm focus:ring-2 focus:ring-vinted-teal focus:outline-none shadow-sm">
+            </div>
+          </div>
+
+          <div>
+            <label for="calc-shipping-select" class="block text-xs font-bold text-slate-700 mb-1">Shipping Tier</label>
+            <select id="calc-shipping-select" onchange="runCalculator()" class="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl font-semibold text-slate-800 text-xs focus:ring-2 focus:ring-vinted-teal focus:outline-none shadow-sm">
+              <option value="2.85">Small Parcel (InPost / Locker) - €2.85</option>
+              <option value="2.59">Small Accessory Parcel - €2.59</option>
+              <option value="5.65">Large Heavy Boots Parcel - €5.65</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- OUTPUT BREAKDOWN -->
+        <div class="md:col-span-7 bg-slate-900 text-white p-5 rounded-2xl shadow-lg space-y-3 relative overflow-hidden">
+          <p class="text-[11px] text-teal-300 font-extrabold uppercase tracking-wider">Fee Breakdown & Final Checkout</p>
+
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between text-slate-300">
+              <span>Item Listed Price:</span>
+              <span id="res-price" class="font-bold text-white">€11.00</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Vinted Buyer Protection Fee (€0.70 + 5%):</span>
+              <span id="res-protection" class="font-bold text-vinted-coral">€1.25</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Shipping Cost:</span>
+              <span id="res-shipping" class="font-bold text-white">€2.85</span>
+            </div>
+
+            <div class="border-t border-slate-800 pt-2.5 mt-1 flex justify-between items-center">
+              <div>
+                <p class="font-extrabold text-sm text-teal-200">Total Buyer Checkout Price:</p>
+                <p class="text-[10px] text-slate-400">Total amount buyer pays at checkout</p>
+              </div>
+              <p id="res-total" class="text-2xl font-black text-vinted-teal">€15.10</p>
+            </div>
+          </div>
+
+          <div class="bg-emerald-950/80 border border-emerald-500/30 p-3 rounded-xl flex items-center justify-between">
+            <div>
+              <p class="text-[11px] font-bold text-emerald-300">Your Net Revolut Payout:</p>
+              <p class="text-[10px] text-emerald-400/80">Vinted charges €0 seller commission</p>
+            </div>
+            <p id="res-seller-net" class="text-xl font-extrabold text-vinted-neonlime">€11.00</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLEAN USER TESTING LOG AT FOOTER -->
+    <section id="testing-section" class="glass-card p-6 rounded-3xl shadow-xl border border-teal-100 space-y-3">
+      <div class="flex items-center space-x-2 border-b border-slate-100 pb-3">
+        <span class="bg-vinted-teal text-white p-1.5 rounded-xl text-xs"><i class="fa-solid fa-user-check"></i></span>
+        <div>
+          <h2 class="font-extrabold text-slate-800 text-base">User Testing Log</h2>
+          <p class="text-xs text-slate-500">Summary of testing feedback and design revisions</p>
+        </div>
+      </div>
+
+      <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-2 text-xs text-slate-700">
+        <div class="flex items-center justify-between font-bold text-slate-800">
+          <span>Tester: Declan (Age 21, Student Seller)</span>
+          <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full text-[10px] font-extrabold">Verified Review</span>
+        </div>
+        <p><strong>What was tested:</strong> Added new wardrobe items (e.g. Zara jeans), tested calculating buyer checkout totals, and used the 10% price drop button on stale items.</p>
+        <p><strong>Initial Confusion:</strong> Confusion over whether the Vinted buyer protection fee (€0.70 + 5%) was deducted from the seller's earnings or added to the buyer's payment.</p>
+        <p><strong>Changes Made:</strong> Added explicit side-by-side labels separating <em>"Total Buyer Checkout Price"</em> from <em>"Your Net Revolut Payout"</em> to make fee breakdown 100% clear.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ADD NEW ITEM MODAL -->
+  <div id="add-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
+      <div class="bg-vinted-teal text-white p-4 px-5 flex justify-between items-center">
+        <h3 class="font-extrabold text-sm flex items-center gap-2">
+          <i class="fa-solid fa-shirt"></i> Add New Wardrobe Listing
+        </h3>
+        <button onclick="toggleModal(false)" class="text-white/80 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <form onsubmit="handleAddItem(event)" class="p-5 space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Item Title</label>
+          <input type="text" id="input-name" required placeholder="e.g. Zara jeans" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-vinted-teal focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Category</label>
+            <select id="input-category" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-vinted-teal focus:outline-none">
+              <option>Womenswear</option>
+              <option>Menswear</option>
+              <option>Footwear</option>
+              <option>Accessories</option>
+              <option>Toys</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Listing Price (€)</label>
+            <input type="number" id="input-price" step="0.01" min="0.5" required placeholder="20.00" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-vinted-teal focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Shipping Option</label>
+            <select id="input-shipping" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-vinted-teal focus:outline-none">
+              <option value="2.85">Small Parcel (€2.85)</option>
+              <option value="2.59">Small Accessory (€2.59)</option>
+              <option value="5.65">Heavy Boots (€5.65)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Days Listed</label>
+            <input type="number" id="input-days" min="0" required value="0" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-vinted-teal focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Initial Status</label>
+          <select id="input-status" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-vinted-teal focus:outline-none">
+            <option value="Active">Active</option>
+            <option value="Action Needed">Action Needed (&gt;10d)</option>
+            <option value="Stale Stock">Stale Stock (&gt;15d)</option>
+            <option value="Sold - Awaiting Payout">Sold - Awaiting Payout</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+
+        <div class="pt-2 flex justify-end space-x-2">
+          <button type="button" onclick="toggleModal(false)" class="px-3.5 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-4 py-2 text-xs font-extrabold bg-vinted-teal text-white rounded-xl shadow-md hover:bg-vinted-darkteal">Save Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- APPLICATION LOGIC JS -->
+  <script>
+    // EXACT DEFAULT 8 SCREENSHOT ITEMS
+    const initialSampleRecords = [
+      { id: 1, name: "Adidas ladies track top burgundy", category: "Womenswear", price: 11.00, fee: 1.25, shipping: 2.85, uploaded: "1 day ago", daysListed: 2, status: "Active" },
+      { id: 2, name: "Pearl clutch bag", category: "Accessories", price: 4.00, fee: 0.90, shipping: 2.85, uploaded: "1 hour ago", daysListed: 1, status: "Active" },
+      { id: 3, name: "Navy fascinator", category: "Accessories", price: 5.50, fee: 0.98, shipping: 2.59, uploaded: "3 hours ago", daysListed: 3, status: "Active" },
+      { id: 4, name: "Halloween Skeleton Hand Hair Clip", category: "Accessories", price: 3.50, fee: 0.88, shipping: 2.59, uploaded: "2 hours ago", daysListed: 1, status: "Active" },
+      { id: 5, name: "Columbia Gilet", category: "Womenswear", price: 18.00, fee: 1.60, shipping: 2.59, uploaded: "4 days ago", daysListed: 4, status: "Active" },
+      { id: 6, name: "Trolls", category: "Toys", price: 8.00, fee: 1.10, shipping: 2.59, uploaded: "14 min ago", daysListed: 12, status: "Action Needed" },
+      { id: 7, name: "Nike Jr. Mercurial Vapor 16 football boots", category: "Footwear", price: 70.00, fee: 4.20, shipping: 5.65, uploaded: "6 days ago", daysListed: 6, status: "Active" },
+      { id: 8, name: "Beautiful earrings for a Xmas party", category: "Accessories", price: 5.27, fee: 0.96, shipping: 2.85, uploaded: "1 day ago", daysListed: 16, status: "Stale Stock" }
+    ];
+
+    let items = [];
+    let activeFilter = 'all';
+
+    window.onload = function() {
+      loadInventory();
+      runCalculator();
+    };
+
+    function loadInventory() {
+      const stored = localStorage.getItem("vinted_dublin_items_v2");
+      if (stored) {
+        try {
+          items = JSON.parse(stored);
+        } catch(e) {
+          items = [...initialSampleRecords];
+        }
+      } else {
+        items = [...initialSampleRecords];
+        saveInventory();
+      }
+      renderInventory();
+    }
+
+    function saveInventory() {
+      localStorage.setItem("vinted_dublin_items_v2", JSON.stringify(items));
+      renderInventory();
+    }
+
+    function resetToSampleData() {
+      if (confirm("Reset inventory back to the 8 default items?")) {
+        items = [...initialSampleRecords];
+        saveInventory();
+      }
+    }
+
+    function runCalculator() {
+      const price = parseFloat(document.getElementById('calc-price-input').value) || 0;
+      const shipping = parseFloat(document.getElementById('calc-shipping-select').value) || 2.85;
+
+      const protectionFee = 0.70 + (price * 0.05);
+      const totalCheckout = price + protectionFee + shipping;
+
+      document.getElementById('res-price').innerText = "€" + price.toFixed(2);
+      document.getElementById('res-protection').innerText = "€" + protectionFee.toFixed(2);
+      document.getElementById('res-shipping').innerText = "€" + shipping.toFixed(2);
+      document.getElementById('res-total').innerText = "€" + totalCheckout.toFixed(2);
+      document.getElementById('res-seller-net').innerText = "€" + price.toFixed(2);
+    }
+
+    function loadBriefExample() {
+      document.getElementById('calc-price-input').value = "11.00";
+      document.getElementById('calc-shipping-select').value = "2.85";
+      runCalculator();
+    }
+
+    function renderInventory() {
+      const container = document.getElementById('inventory-container');
+      container.innerHTML = "";
+
+      let staleCount = 0;
+      let pendingCount = 0;
+      let completedRevenue = 0;
+
+      const filtered = items.filter(item => {
+        // Automatic status flag checks based on days listed
+        if (item.status !== 'Sold - Awaiting Payout' && item.status !== 'Completed') {
+          if (item.daysListed > 15) item.status = 'Stale Stock';
+          else if (item.daysListed > 10) item.status = 'Action Needed';
+        }
+
+        if (activeFilter === 'action') return item.daysListed > 10 && item.status !== 'Completed';
+        if (activeFilter === 'active') return item.status === 'Active';
+        if (activeFilter === 'sold') return item.status === 'Sold - Awaiting Payout' || item.status === 'Completed';
+        return true;
+      });
+
+      items.forEach(item => {
+        if (item.daysListed > 10 && item.status !== 'Completed') staleCount++;
+        if (item.status === 'Sold - Awaiting Payout') pendingCount++;
+        if (item.status === 'Completed') completedRevenue += item.price;
+      });
+
+      document.getElementById('stat-total').innerText = items.length;
+      document.getElementById('stat-stale').innerText = staleCount;
+      document.getElementById('stat-pending').innerText = pendingCount;
+      document.getElementById('stat-revenue').innerText = "€" + completedRevenue.toFixed(2);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs font-semibold">No wardrobe items match the selected filter.</div>`;
+        return;
+      }
+
+      filtered.forEach(item => {
+        // Dynamic Protection Fee (€0.70 + 5%) and Buyer Total (Price + Fee + Shipping)
+        const protectionFee = item.fee || (0.70 + (item.price * 0.05));
+        const shippingFee = item.shipping || 2.85;
+        const buyerTotal = item.price + protectionFee + shippingFee;
+
+        let badgeClass = "bg-slate-100 text-slate-700";
+        if (item.status === 'Action Needed') badgeClass = "bg-amber-100 text-amber-800 border-amber-300 font-bold";
+        if (item.status === 'Stale Stock') badgeClass = "bg-rose-100 text-rose-800 border-rose-300 font-bold animate-pulse";
+        if (item.status === 'Active') badgeClass = "bg-emerald-100 text-emerald-800 border-emerald-300 font-bold";
+        if (item.status === 'Sold - Awaiting Payout') badgeClass = "bg-purple-100 text-purple-800 border-purple-300 font-bold";
+        if (item.status === 'Completed') badgeClass = "bg-teal-100 text-teal-800 border-teal-300 font-bold";
+
+        const card = document.createElement('div');
+        card.className = "p-4 hover:bg-slate-50/90 transition border-b border-slate-100 last:border-none";
+        
+        // Single row flexbox for Desktop/Tablet with clean line wrap on mobile
+        card.innerHTML = `
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            
+            <!-- LEFT ITEM INFO BLOCK -->
+            <div class="space-y-1.5 flex-1">
+              <div class="flex items-center space-x-2 flex-wrap gap-y-1">
+                <span class="font-extrabold text-slate-800 text-sm leading-tight">${item.name}</span>
+                <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-semibold">${item.category}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-md border ${badgeClass}">${item.status}</span>
+              </div>
+
+              <div class="flex items-center space-x-2 text-xs text-slate-500 flex-wrap gap-y-1">
+                <span>Uploaded: <strong class="text-slate-700">${item.uploaded}</strong></span>
+                <span class="text-slate-300">•</span>
+                <span>Price: <strong class="text-slate-900 font-bold">€${item.price.toFixed(2)}</strong></span>
+                <span class="text-slate-300">•</span>
+                <span>Fee: <span class="text-slate-600">€${protectionFee.toFixed(2)}</span></span>
+                <span class="text-slate-300">•</span>
+                <span>Ship: <span class="text-slate-600">€${shippingFee.toFixed(2)}</span></span>
+                <span class="text-slate-300">•</span>
+                <span class="text-vinted-teal font-extrabold bg-teal-50 px-2 py-0.5 rounded-md border border-teal-100">
+                  Buyer Total: €${buyerTotal.toFixed(2)}
+                </span>
+              </div>
+            </div>
+
+            <!-- RIGHT ACTION CONTROLS -->
+            <div class="flex items-center space-x-2 self-start lg:self-center pt-1 lg:pt-0">
+              ${(item.daysListed > 10 && item.status !== 'Completed') ? `
+                <button onclick="quickPriceDrop(${item.id})" class="bg-vinted-coral hover:bg-rose-600 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl shadow-xs transition flex items-center gap-1 whitespace-nowrap">
+                  <i class="fa-solid fa-arrow-down"></i> -10% Price
+                </button>
+              ` : ''}
+
+              <select onchange="updateItemStatus(${item.id}, this.value)" class="text-xs font-semibold bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-vinted-teal shadow-xs">
+                <option value="Active" ${item.status==='Active'?'selected':''}>Active</option>
+                <option value="Action Needed" ${item.status==='Action Needed'?'selected':''}>Action Needed</option>
+                <option value="Stale Stock" ${item.status==='Stale Stock'?'selected':''}>Stale Stock</option>
+                <option value="Sold - Awaiting Payout" ${item.status==='Sold - Awaiting Payout'?'selected':''}>Awaiting Payout</option>
+                <option value="Completed" ${item.status==='Completed'?'selected':''}>Completed</option>
+              </select>
+
+              <button onclick="deleteItem(${item.id})" class="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg transition" title="Delete record">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function quickPriceDrop(id) {
+      const item = items.find(i => i.id === id);
+      if (item) {
+        item.price = Math.max(1, parseFloat((item.price * 0.9).toFixed(2)));
+        item.fee = 0.70 + (item.price * 0.05);
+        saveInventory();
+      }
+    }
+
+    function updateItemStatus(id, newStatus) {
+      const item = items.find(i => i.id === id);
+      if (item) {
+        item.status = newStatus;
+        saveInventory();
+      }
+    }
+
+    function deleteItem(id) {
+      if (confirm("Remove this item from your wardrobe tracker?")) {
+        items = items.filter(i => i.id !== id);
+        saveInventory();
+      }
+    }
+
+    function handleAddItem(e) {
+      e.preventDefault();
+      const name = document.getElementById('input-name').value;
+      const category = document.getElementById('input-category').value;
+      const price = parseFloat(document.getElementById('input-price').value) || 0;
+      const shipping = parseFloat(document.getElementById('input-shipping').value) || 2.85;
+      const daysListed = parseInt(document.getElementById('input-days').value) || 0;
+      const status = document.getElementById('input-status').value;
+
+      const fee = 0.70 + (price * 0.05);
+
+      const newItem = {
+        id: Date.now(),
+        name,
+        category,
+        price,
+        fee,
+        shipping,
+        daysListed,
+        status,
+        uploaded: "Just now"
+      };
+
+      items.unshift(newItem);
+      saveInventory();
+      toggleModal(false);
+      e.target.reset();
+    }
+
+    function setFilter(filterType) {
+      activeFilter = filterType;
+      ['all', 'action', 'active', 'sold'].forEach(f => {
+        const btn = document.getElementById(`filter-${f}`);
+        if (f === filterType) {
+          btn.className = "px-3 py-1 rounded-lg text-xs font-extrabold bg-vinted-teal text-white shadow-sm";
+        } else {
+          btn.className = "px-3 py-1 rounded-lg text-xs font-semibold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200";
+        }
+      });
+      renderInventory();
+    }
+
+    function toggleModal(show) {
+      const modal = document.getElementById('add-modal');
+      if (show) modal.classList.remove('hidden');
+      else modal.classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
